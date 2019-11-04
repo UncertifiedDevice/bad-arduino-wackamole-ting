@@ -65,8 +65,11 @@ class wackButtonManager
     }
 
   private:
+    //Arrays that will store the state of each button pin
     bool* currentState;
     bool* previousState;
+
+    //Integers that indicate the range of pins used for buttons
     int startPin;
     int endPin;
 };
