@@ -66,6 +66,11 @@ class wackPlayer
       return score;
     }
 
+    void setLED(int ledIndex, int ledState)
+    {
+      digitalWrite(ledPin + ledIndex, ledState);
+    }
+
     void reset(int _difficulty)
     {
       for(int i = ledPin; i <= ledPin + 3; i++)

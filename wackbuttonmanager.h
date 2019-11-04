@@ -8,8 +8,8 @@ class wackButtonManager
     wackButtonManager(int _startPin, int _endPin)
 
     //Initialize button state arrays with appropriate length
-    : currentState(new bool[_endPin - _startPin + 1])
-    , previousState(new bool[_endPin - _startPin + 1])
+    : currentState(new int[_endPin - _startPin + 1])
+    , previousState(new int[_endPin - _startPin + 1])
 
     //Initialize startPin and endPin attributes
     , startPin(_startPin)
@@ -18,9 +18,9 @@ class wackButtonManager
     //Functional part of constructor sets pinMode and retrieves initial state
     {
       //Setting pin modes...
-      for(int i = startPin; i < endPin + 1; i++)
+      for(int i = startPin; i <= endPin; i++)
       {
-        pinMode(i, INPUT_PULLUP);
+        pinMode(i, INPUT);
       }
 
       //Make sure previousState and currentState are set
@@ -31,10 +31,10 @@ class wackButtonManager
     //Update button states, to be called every loop()
     void pollButtons()
     {
-      for(int i = 0; i < endPin - startPin; i++)
+      for(int i = 0; i <= endPin - startPin; i++)
       {
         previousState[i] = currentState[i];
-        currentState[i] = digitalRead(i + startPin);
+        currentState[i] = digitalRead(startPin + i);
       }
     }
 
@@ -66,8 +66,8 @@ class wackButtonManager
 
   private:
     //Arrays that will store the state of each button pin
-    bool* currentState;
-    bool* previousState;
+    int* currentState;
+    int* previousState;
 
     //Integers that indicate the range of pins used for buttons
     int startPin;
