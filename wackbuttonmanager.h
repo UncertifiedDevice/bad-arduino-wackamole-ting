@@ -5,15 +5,15 @@ class wackButtonManager
 {
   public:
     //Constructor takes two int values to determine range of pins to poll for input
-    wackButtonManager(int startPin, int endPin)
+    wackButtonManager(int _startPin, int _endPin)
 
     //Initialize button state arrays with appropriate length
-    : currentState(new bool[endPin - startPin + 1])
-    , previousState(new bool[endPin - startPin + 1])
+    : currentState(new bool[_endPin - _startPin + 1])
+    , previousState(new bool[_endPin - _startPin + 1])
 
     //Initialize startPin and endPin attributes
-    , startPin(startPin)
-    , endPin(endPin)
+    , startPin(_startPin)
+    , endPin(_endPin)
 
     //Functional part of constructor sets pinMode and retrieves initial state
     {

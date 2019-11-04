@@ -37,56 +37,65 @@ class wackGame
 
       buzzerPin = BUZZERPIN;
       leadServo.attach(SERVOPIN);
+
+      nextTick = millis() + 10;
     }
 
     void tick()
     {
-      switch(gameState)
+      if(millis() >= nextTick)
       {
-        case S_SETUP:
+        buttonMgr.pollButtons();
+        
+        switch(gameState)
         {
-          //Retrieve player count using buttons
-          //Retrieve difficulty using buttons
-          //Countdown before game begins
-          //Play some silly buzzer melody
-          //set gameState S_INGAME
-          break;
-        }
-
-        case S_INGAME:
-        {
-          //Player 1
-          //Select random LED, set on timer
-          //When on timer is up light up LED and set off timer
-          //Until off timer is up accept input
-          //When input received turn off led, reset on timer, sound buzzer
-          //When input received after off timer is up increase on timer by 100
+          case S_SETUP:
+          {
+            //Retrieve player count using buttons
+            //Retrieve difficulty using buttons
+            //Countdown before game begins
+            //Play some silly buzzer melody
+            //set gameState S_INGAME
+            break;
+          }
   
-          //Player 2 (if applicable)
-          //......
+          case S_INGAME:
+          {
+            //Player 1
+            //Select random LED, set on timer
+            //When on timer is up light up LED and set off timer
+            //Until off timer is up accept input
+            //When input received turn off led, reset on timer, sound buzzer
+            //When input received after off timer is up increase on timer by 100
+    
+            //Player 2 (if applicable)
+            //......
+    
+            //Player 3 (if applicable)
+            //......
+            
+            //Compare scores, update servo
+            //If score reaches 10 set gameState S_GAMEOVER
+            break;
+          }
   
-          //Player 3 (if applicable)
-          //......
-          
-          //Compare scores, update servo
-          //If score reaches 10 set gameState S_GAMEOVER
-          break;
+          case S_GAMEOVER:
+          {
+            //Wiggle servo over winner
+            //Flash winners lights
+            //Animate other lights
+            //Any input will reset game by resetting scores and setting gameState S_SETUP
+            break;
+          }
+  
+          default:
+          {
+            gameState = 0;
+            break;
+          }
         }
 
-        case S_GAMEOVER:
-        {
-          //Wiggle servo over winner
-          //Flash winners lights
-          //Animate other lights
-          //Any input will reset game by resetting scores and setting gameState S_SETUP
-          break;
-        }
-
-        default:
-        {
-          gameState = 0;
-          break;
-        }
+        nextTick = millis() + 10;
       }
     }
 
@@ -95,6 +104,8 @@ class wackGame
 
   private:
     wackButtonManager buttonMgr;
+
+    unsigned long int nextTick;
 
     Servo leadServo;
     int buzzerPin;
