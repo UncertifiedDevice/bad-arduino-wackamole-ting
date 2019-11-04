@@ -27,7 +27,7 @@ class wackGame
   public:
     wackGame()
     : buttonMgr(BUTTONPIN, BUTTONPIN + 2)
-    , players({
+    , playerArray({
         wackPlayer(LEDPIN, BUZZERPIN), 
         wackPlayer(LEDPIN + 4, BUZZERPIN),
         wackPlayer(LEDPIN + 8, BUZZERPIN)
@@ -45,8 +45,6 @@ class wackGame
       leadServo.attach(SERVOPIN);
 
       srand(millis());
-
-      players[0].reset(0);
 
       nextTick = millis() + 10;
     }
@@ -66,34 +64,63 @@ class wackGame
             //Countdown before game begins
             //Play some silly buzzer melody
             //set gameState S_INGAME
-
-            players[0].update();
-
-            if(buttonMgr.buttonDown(0))
-            {
-              players[0].buttonPress();
-            }
             
             break;
           }
   
           case S_INGAME:
           {
-            //Player 1
-            //Select random LED, set on timer
-            //When on timer is up light up LED and set off timer
-            //Until off timer is up accept input
-            //When input received turn off led, reset on timer, sound buzzer
-            //When input received after off timer is up increase on timer by 100
-    
-            //Player 2 (if applicable)
-            //......
-    
-            //Player 3 (if applicable)
-            //......
-            
-            //Compare scores, update servo
-            //If score reaches 10 set gameState S_GAMEOVER
+            playerArray[0].update();
+
+            if(buttonMgr.buttonDown(0))
+            {
+              playerArray[0].buttonPress();
+            }
+
+            playerArray[1].update();
+
+            if(buttonMgr.buttonDown(1))
+            {
+              playerArray[1].buttonPress();
+            }
+
+            playerArray[2].update();
+
+            if(buttonMgr.buttonDown(2))
+            {
+              playerArray[2].buttonPress();
+            }
+
+            if(playerArray[0].getScore() > playerArray[1].getScore() && playerArray[0].getScore() > playerArray[2].getScore())
+            {
+              leadServo.write(0);
+
+              if(playerArray[0].getScore() >= 10)
+              {
+                gameState = S_GAMEOVER;
+              }
+            }
+
+            if(playerArray[1].getScore() > playerArray[0].getScore() && playerArray[1].getScore() > playerArray[2].getScore())
+            {
+              leadServo.write(80);
+
+              if(playerArray[1].getScore() >= 10)
+              {
+                gameState = S_GAMEOVER;
+              }
+            }
+
+            if(playerArray[2].getScore() > playerArray[0].getScore() && playerArray[2].getScore() > playerArray[1].getScore())
+            {
+              leadServo.write(160);
+
+              if(playerArray[2].getScore() >= 10)
+              {
+                gameState = S_GAMEOVER;
+              }
+            }
+
             break;
           }
   
@@ -122,17 +149,19 @@ class wackGame
 
   private:
     wackButtonManager buttonMgr;
-
-    wackPlayer players[3];
+    wackPlayer playerArray[3];
 
     unsigned long int nextTick;
+    int gameState = 0;
 
     Servo leadServo;
     int buzzerPin;
-  
+
+    //SETUP VARIABLES
     int playerCount = 0;
     int difficulty = 0;
-    int gameState = 0;
+
+    //GAMEOVER VARIABLES
 };
 
 #endif // WACKGAME_H

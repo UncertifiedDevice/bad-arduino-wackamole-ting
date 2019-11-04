@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#define EASYMOD 450 + rand() % 50
+#define EASYMOD 400 + rand() % 50
 #define MEDIUMMOD 350 + rand() % 50
 #define HARDMOD 200 + rand() % 100
 
@@ -49,13 +49,15 @@ class wackPlayer
         ledOffset = rand() % 3;
         
         digitalWrite(ledPin + 3, HIGH);
-        blueTimer = millis() + 400;
+        blueTimer = millis() + 250;
 
-        tone(buzzPin, 2000, 100);
+        tone(buzzPin, 2000, 75);
       }
       else
       {
         onTimer += 300;
+
+        tone(buzzPin, 1000, 75);
       }
     }
 
