@@ -3,6 +3,7 @@
 
 #include <Servo.h>
 #include "wackbuttonmanager.h"
+#include "wackplayer.h"
 
 //12 Pins starting with this pin will be allocated for LEDs
 #define LEDPIN 2
@@ -26,6 +27,11 @@ class wackGame
   public:
     wackGame()
     : buttonMgr(BUTTONPIN, BUTTONPIN + 2)
+    , players({
+        wackPlayer(LEDPIN, BUZZERPIN), 
+        wackPlayer(LEDPIN + 4, BUZZERPIN),
+        wackPlayer(LEDPIN + 8, BUZZERPIN)
+      })
     {
       for(int i = LEDPIN; i < LEDPIN + 11; i++)
       {
@@ -37,6 +43,10 @@ class wackGame
 
       buzzerPin = BUZZERPIN;
       leadServo.attach(SERVOPIN);
+
+      srand(millis());
+
+      players[0].reset(0);
 
       nextTick = millis() + 10;
     }
@@ -56,6 +66,14 @@ class wackGame
             //Countdown before game begins
             //Play some silly buzzer melody
             //set gameState S_INGAME
+
+            players[0].update();
+
+            if(buttonMgr.buttonDown(0))
+            {
+              players[0].buttonPress();
+            }
+            
             break;
           }
   
@@ -104,6 +122,8 @@ class wackGame
 
   private:
     wackButtonManager buttonMgr;
+
+    wackPlayer players[3];
 
     unsigned long int nextTick;
 
